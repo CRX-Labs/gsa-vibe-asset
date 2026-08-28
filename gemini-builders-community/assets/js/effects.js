@@ -346,5 +346,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounterRoll();
   initLabelDraw();
   initCardTilt();
+  initUpdatesModal();
   initTickerControl();
 });
+
+/* ══════════════════════════════════════════
+   10. MODAL POP-UP LOGIC
+   ══════════════════════════════════════════ */
+function initUpdatesModal() {
+  const openBtn = document.getElementById('btn-open-updates');
+  const closeBtn = document.getElementById('btn-close-updates');
+  const modal = document.getElementById('updates-modal');
+
+  if (openBtn && closeBtn && modal) {
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Lock background scrolling
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = ''; // Unlock background scrolling
+    });
+  }
+}

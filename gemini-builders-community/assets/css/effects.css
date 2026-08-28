@@ -225,3 +225,4 @@ body::after {
   .cursor-dot, .cursor-ring { display: none !important; }
   *, *::before, *::after { cursor: auto !important; }
 }
+

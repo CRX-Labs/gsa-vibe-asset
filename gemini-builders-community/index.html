@@ -4,6 +4,34 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gemini Builders Community</title>
+    <meta name="description" content="Not a club. A movement at UGI. We build with Gemini, experiment with AI, and ship real products. Builders over consumers.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Gemini Builders Community">
+    <meta property="og:description" content="We are tired of just consuming AI. So we built a space to learn, build, collaborate, and ship real AI projects together. ⚡">
+    <meta property="og:url" content="https://gcb-hub.netlify.app/">
+    <meta property="og:image" content="https://gcb-hub.netlify.app/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Gemini Builders Community">
+
+<meta property="og:image:secure_url"
+      content="https://gcb-hub.netlify.app/og-image.png">
+
+<meta property="og:image:type" content="image/png">
+
+<meta property="og:image:width" content="1200">
+
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"
+content="Gemini Builders Community banner">
+
+<meta name="twitter:image:alt"
+content="Gemini Builders Community banner">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gemini Builders Community">
+    <meta name="twitter:description" content="We are tired of just consuming AI. So we built a space to learn, build, collaborate, and ship real AI projects together. ⚡">
+    <meta name="twitter:image" content="https://gcb-hub.netlify.app/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Special+Elite&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
@@ -373,9 +401,9 @@ button, input, textarea, select {
 .event-badge.completed {
   background: var(--green);
 }
-
 /* ── CARDS: BUILDS ──────────────────────── */
 .build-card {
+  position: relative; /* IMP: Tape ko card ke upar rokne ke liye */
   background: white;
   border: 3px solid var(--ink);
   padding: 24px 22px;
@@ -385,6 +413,8 @@ button, input, textarea, select {
 .build-card:nth-child(3n+2) { box-shadow: 5px 5px 0 var(--green); }
 .build-card:nth-child(3n+3) { box-shadow: 5px 5px 0 var(--red); }
 .build-card:hover { transform: translate(-3px, -3px); }
+
+/* Placeholder Card (Ispe tape nahi lagega) */
 .build-card.placeholder {
   border-style: dashed;
   box-shadow: none;
@@ -394,6 +424,40 @@ button, input, textarea, select {
   justify-content: center;
   min-height: 180px;
 }
+
+/* ── MASKING TAPE EFFECT (PERFECT CORNER ALIGNMENT) ── */
+.build-card:not(.placeholder)::after {
+  content: '';
+  position: absolute;
+  width: 95px;       
+  height: 28px;      
+  background: #E3DAC6; 
+  box-shadow: 2px 3px 5px rgba(0,0,0,0.15); 
+  border-left: 3px dotted rgba(0,0,0,0.12);  
+  border-right: 3px dotted rgba(0,0,0,0.12); 
+  z-index: 10;
+  pointer-events: none; 
+}
+
+/* Sabhi tapes ko top-left corner par ekdum perfect lock kiya hai */
+.build-card:nth-child(3n+1):not(.placeholder)::after {
+  top: -12px;
+  left: -28px;
+  transform: rotate(-38deg);
+}
+.build-card:nth-child(3n+2):not(.placeholder)::after {
+  top: -10px;
+  left: -26px;
+  transform: rotate(-36deg);
+  background: #DCD3BE; /* Thoda darker shade */
+}
+.build-card:nth-child(3n+3):not(.placeholder)::after {
+  top: -13px;
+  left: -29px;
+  transform: rotate(-39deg);
+}
+
+/* Tags, Title, Author, etc. (Purana Code Same) */
 .build-tag {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -883,7 +947,7 @@ button, input, textarea, select {
 .builds-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 48px 24px; /* Pehle sirf '24px' tha. Ab Top/Bottom 48px aur Left/Right 24px hai */
 }
 
 /* ── ROADMAP ────────────────────────────── */
@@ -1088,7 +1152,7 @@ button, input, textarea, select {
   background: var(--ink);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99999;
+  z-index: 9999999 !important;
   transform: translate(-50%, -50%);
   transition: transform 0.08s ease, background 0.2s ease, width 0.2s ease, height 0.2s ease;
   mix-blend-mode: multiply;
@@ -1101,7 +1165,7 @@ button, input, textarea, select {
   border: 2.5px solid var(--ink);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99998;
+  z-index: 9999999 !important;
   transform: translate(-50%, -50%);
   transition: transform 0.18s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   opacity: 0.5;
@@ -1302,11 +1366,203 @@ body::after {
   *, *::before, *::after { cursor: auto !important; }
 }
 
+/* ═══════════════════════════════════════════
+   FLOATING PINNED NOTE & OVERLAY MODAL
+   ═══════════════════════════════════════════ */
+
+/* 1. Kone wala Sticky Note Shape */
+/* 1. Continuous Wiggle Animation */
+@keyframes stickyWiggle {
+  0%   { transform: rotate(-6deg) translateY(0px); }
+  50%  { transform: rotate(-2deg) translateY(-4px) scale(1.02); }
+  100% { transform: rotate(-6deg) translateY(0px); }
+}
+
+/* 2. Enhanced Floating Button */
+.floating-updates-btn {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 900;
+  background: var(--yellow);
+  border: 4px solid var(--ink);
+  /* Shadow ko Black se Blue kar diya for maximum contrast */
+  box-shadow: 8px 8px 0 var(--blue); 
+  padding: 16px 24px;
+  font-family: var(--font-marker);
+  font-size: 20px;
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1.1;
+  /* Animation apply ki */
+  animation: stickyWiggle 2.5s ease-in-out infinite;
+  transition: all 0.2s ease;
+}
+
+/* 3. Hover State - Jhatke se red shadow aur zoom */
+.floating-updates-btn:hover {
+  animation: none; /* Hover pe wiggle ruk jayega */
+  transform: rotate(0deg) scale(1.1) translateY(-5px);
+  box-shadow: 10px 12px 0 var(--red); /* Ekdum pop karega */
+}
+
+/* 4. Pin Tweaks */
+.floating-updates-btn .pin {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 34px; /* Pin thodi badi ki */
+  filter: drop-shadow(3px 5px 0px rgba(0,0,0,0.4));
+  transition: transform 0.2s;
+}
+.floating-updates-btn:hover .pin {
+  transform: translateX(-50%) rotate(15deg); /* Hover pe pin thodi ghumegi */
+}
+
+/* 2. Fullscreen Pop-up Background */
+.updates-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.95);
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+.updates-modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+  overflow-y: auto;
+}
+
+/* 3. Modal Box (Ab iske ANDAR scroll hoga) */
+.updates-modal-content {
+  background: var(--blue);
+  border: 5px solid var(--ink);
+  width: 100%;
+  max-width: 1100px;
+  /* Screen ke hisaab se height limit set kardi */
+  max-height: 85vh; 
+  /* Andar scroll enable kar diya */
+  overflow-y: auto; 
+  padding: 60px 40px;
+  position: relative;
+  transform: translateY(50px) scale(0.95);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin: auto;
+  box-shadow: 20px 20px 0 var(--ink);
+}
+
+/* 3.5 Brutalist Custom Scrollbar for Modal */
+.updates-modal-content::-webkit-scrollbar {
+  width: 14px;
+}
+.updates-modal-content::-webkit-scrollbar-track {
+  background: var(--ink);
+  border-left: 4px solid var(--ink);
+}
+.updates-modal-content::-webkit-scrollbar-thumb {
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  border-radius: 2px;
+}
+.updates-modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--red);
+}
+
+/* Overlay Active State */
+.updates-modal-overlay.active .updates-modal-content {
+  transform: translateY(0) scale(1);
+}
+
+/* 4. Brutalist Close Button */
+.close-modal-btn {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background: var(--red);
+  color: white;
+  border: 4px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 10px 20px;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transform: rotate(4deg);
+  transition: transform 0.2s;
+}
+.close-modal-btn:hover {
+  transform: rotate(0deg) scale(1.1);
+}
+
+/* 5. Folder Grid Styles */
+.updates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+.update-folder {
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 24px;
+  position: relative;
+}
+.update-folder::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: 15px;
+  width: 45px;
+  height: 20px;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-bottom: none;
+}
+.folder-title {
+  font-family: var(--font-marker);
+  font-size: 22px;
+  border-bottom: 3px dashed rgba(0,0,0,0.15);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.folder-links { display: flex; flex-direction: column; gap: 8px; }
+.folder-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px 12px;
+  border: 2px solid var(--ink);
+  background: white;
+  transition: 0.2s;
+}
+.folder-link:hover {
+  background: var(--yellow);
+  transform: translate(-3px, -3px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* Hide on very small mobile to prevent overlap */
+@media(max-width: 768px) {
+  .floating-updates-btn { bottom: 20px; right: 20px; padding: 10px 15px; font-size: 16px; }
+  .floating-updates-btn .pin { font-size: 24px; top: -10px; }
+  .close-modal-btn { right: 10px; top: -15px; font-size: 12px; }
+  .updates-modal-content { padding: 40px 20px; }
+}
   </style>
   <!-- Typed.js for typewriter effect -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.min.js"></script>
 </head>
 <body>
+
+
 
 <!-- ══════════════════════════ HIGH-VISIBILITY BRUTALIST NAV BAR ══════════════════════════ -->
 <nav style="position: sticky; top: 0; z-index: 100; background: var(--ink); border-bottom: 4px solid var(--yellow); padding: 15px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; min-height: 80px;">
@@ -1594,6 +1850,158 @@ body::after {
     </div>
   </div>
 
+  <!-- ══════════════════════════ LATEST INTEL FLOATING TAG & MODAL ══════════════════════════ -->
+  <!-- 1. Floating Pinned Note -->
+  <button id="btn-open-updates" class="floating-updates-btn">
+    <span class="pin">📌</span>
+    LATEST<br>INTEL
+  </button>
+
+  <!-- ══════════════════════════ OVERLAY MODAL (FULL DIRECTORY) ══════════════════════════ -->
+  <div id="updates-modal" class="updates-modal-overlay">
+    <div class="updates-modal-content">
+      
+      <button id="btn-close-updates" class="close-modal-btn">[ X ] CLOSE FILES</button>
+      
+      <div class="section-header" style="margin-bottom: 40px;">
+        <div class="section-label" style="color:var(--yellow);">Resource Directory</div>
+        <h2 class="section-title" style="color:white; line-height: 1.1;">Microsoft<br/>Learning Hub</h2>
+      </div>
+      
+      <div class="updates-grid">
+        
+        <!-- FOLDER 1 -->
+        <div class="update-folder" style="transform: rotate(-1deg);">
+          <h3 class="folder-title">🤖 AI & Copilot</h3>
+          <div class="folder-links">
+            <a href="https://copilot.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Copilot Hub</a>
+            <a href="https://microsoft.com/microsoft-365/copilot-learning-center?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learning Center</a>
+            <a href="https://microsoft.com/microsoft-copilot/for-individuals?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] For Individuals</a>
+            <a href="https://learn.microsoft.com/copilot?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn Docs</a>
+            <a href="https://microsoft.com/microsoft-365-copilot?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] M365 Copilot</a>
+          </div>
+        </div>
+
+        <!-- FOLDER 2 -->
+        <div class="update-folder" style="transform: rotate(1.5deg);">
+          <h3 class="folder-title">☁️ Azure & Cloud</h3>
+          <div class="folder-links">
+            <a href="https://azure.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Microsoft Azure</a>
+            <a href="https://developer.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] MS Developer</a>
+            <a href="https://azure.microsoft.com/free?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Azure Free</a>
+            <a href="https://dotnet.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] .NET Hub</a>
+            <a href="https://azure.microsoft.com/free/students?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Azure for Students</a>
+            <a href="https://learn.microsoft.com/developer?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn Developer</a>
+            <a href="https://code.visualstudio.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] VS Code</a>
+            <a href="https://microsoft.com/microsoft-cloud/blog?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Cloud Blog</a>
+            <a href="https://devblogs.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Dev Blogs</a>
+          </div>
+        </div>
+
+        <!-- FOLDER 3 -->
+        <div class="update-folder" style="transform: rotate(-0.5deg);">
+          <h3 class="folder-title">📊 Data & Fabric</h3>
+          <div class="folder-links">
+            <a href="https://microsoft.com/microsoft-fabric?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] MS Fabric</a>
+            <a href="https://blog.fabric.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Fabric Blog</a>
+            <a href="https://community.fabric.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Fabric Community</a>
+            <a href="https://learn.microsoft.com/fabric?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn Fabric</a>
+          </div>
+        </div>
+
+        <!-- FOLDER 4 -->
+        <div class="update-folder" style="transform: rotate(0.5deg);">
+          <h3 class="folder-title">💻 Programming</h3>
+          <div class="folder-links">
+            <a href="https://azure.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Azure Hub</a>
+            <a href="https://developer.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Developer Portal</a>
+            <a href="https://dotnet.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] .NET Framework</a>
+            <a href="https://learn.microsoft.com/developer?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn Developer</a>
+            <a href="https://code.visualstudio.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] VS Code</a>
+            <a href="https://devblogs.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Dev Blogs</a>
+          </div>
+        </div>
+
+        <!-- FOLDER 5 -->
+        <div class="update-folder" style="transform: rotate(2deg);">
+          <h3 class="folder-title">⚡ Power Platform</h3>
+          <div class="folder-links">
+            <a href="https://microsoft.com/power-platform?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Power Platform</a>
+            <a href="https://learn.microsoft.com/power-automate?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Power Automate</a>
+            <a href="https://community.powerplatform.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] PP Community</a>
+            <a href="https://learn.microsoft.com/power-bi?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Power BI</a>
+            <a href="https://powerbi.microsoft.com/blog?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Power BI Blog</a>
+            <a href="https://learn.microsoft.com/power-apps?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Power Apps</a>
+            <a href="https://learn.microsoft.com/power-platform?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn PP</a>
+            <a href="https://learn.microsoft.com/power-pages?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Power Pages</a>
+          </div>
+        </div>
+        
+        <!-- FOLDER 6 -->
+        <div class="update-folder" style="transform: rotate(-1.5deg);">
+          <h3 class="folder-title">🚀 Startups</h3>
+          <div class="folder-links">
+            <a href="https://microsoft.com/startups?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] MS Startups</a>
+            <a href="https://learn.microsoft.com/startups?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn Startups</a>
+            <a href="https://microsoft.com/startups/ai?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Startups AI</a>
+            <a href="https://learn.microsoft.com/training/topics/startups?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Startup Topics</a>
+            <a href="https://microsoft.com/startups/blog?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Startups Blog</a>
+            <a href="https://imaginecup.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Imagine Cup</a>
+          </div>
+        </div>
+
+        <!-- FOLDER 7 -->
+        <div class="update-folder" style="transform: rotate(1deg);">
+          <h3 class="folder-title">🧑‍💻 Tech Community</h3>
+          <div class="folder-links">
+            <a href="https://azure.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Azure Community</a>
+            <a href="https://developer.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Developer Space</a>
+            <a href="https://learn.microsoft.com/developer?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Learn Developer</a>
+            <a href="https://code.visualstudio.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] VS Code</a>
+            <a href="https://devblogs.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Dev Blogs</a>
+            <a href="https://techcommunity.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Tech Community</a>
+          </div>
+        </div>
+
+        <!-- FOLDER 8 -->
+        <div class="update-folder" style="transform: rotate(-1deg);">
+          <h3 class="folder-title">🎯 General Skilling</h3>
+          <div class="folder-links">
+            <a href="https://events.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] MS Events</a>
+            <a href="https://reactor.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] MS Reactor</a>
+            <a href="https://learn.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] MS Learn Hub</a>
+            <a href="https://microsoft.com/insidetrack?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Inside Track</a>
+            <a href="https://techcommunity.microsoft.com?wt.mc_id=studentamb_598446" target="_blank" class="folder-link">[ ↗ ] Tech Community</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- THE YELLOW NOTE (WHY EXPLORE) -->
+      <div class="sketch-box-yellow" style="margin-top: 50px; padding: 30px; background: var(--yellow); transform: rotate(-0.5deg);">
+        <h3 style="font-family: var(--font-marker); font-size: 24px; color: var(--ink); margin-bottom: 15px;">🌟 WHY EXPLORE THESE RESOURCES?</h3>
+        <ul style="font-family: var(--font-mono); font-size: 14px; font-weight: bold; color: var(--ink); line-height: 2; margin-left: 10px;">
+          <li>✅ Official Microsoft learning resources</li>
+          <li>✅ AI, Cloud, Data & Programming skills</li>
+          <li>✅ Beginner-friendly learning content</li>
+          <li>✅ Learn at your own pace</li>
+          <li>✅ Build practical technical skills</li>
+          <li>✅ Earn Microsoft Learn achievements & badges</li>
+          <li>✅ Explore modern technologies & career skills</li>
+        </ul>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 3px dashed var(--ink);">
+          <p style="font-family: var(--font-mono); font-size: 12px; color: var(--ink); margin-bottom: 10px;">
+            📌 <strong>NOTE:</strong> Resources are free to explore. Some Microsoft Learn content may offer achievements or badges. Microsoft certification exams have separate requirements.
+          </p>
+          <p style="font-family: var(--font-marker); font-size: 18px; color: var(--red);">
+            🔥 Pick your field. Start learning. Build your skills.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
@@ -1633,6 +2041,7 @@ body::after {
     </div>
   </footer>
 
+  
   <script>
     'use strict';
 
