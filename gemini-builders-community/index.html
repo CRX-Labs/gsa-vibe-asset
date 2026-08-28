@@ -1441,16 +1441,14 @@ body::after {
   overflow-y: auto;
 }
 
-/* 3. Modal Box (Ab iske ANDAR scroll hoga) */
+/* Modal Box (Andar scroll lagane ke liye) */
 .updates-modal-content {
   background: var(--blue);
   border: 5px solid var(--ink);
   width: 100%;
   max-width: 1100px;
-  /* Screen ke hisaab se height limit set kardi */
-  max-height: 85vh; 
-  /* Andar scroll enable kar diya */
-  overflow-y: auto; 
+  max-height: 85vh; /* Screen ki 85% height lega */
+  overflow-y: auto; /* Box ke andar scroll layega */
   padding: 60px 40px;
   position: relative;
   transform: translateY(50px) scale(0.95);
@@ -1459,33 +1457,18 @@ body::after {
   box-shadow: 20px 20px 0 var(--ink);
 }
 
-/* 3.5 Brutalist Custom Scrollbar for Modal */
-.updates-modal-content::-webkit-scrollbar {
-  width: 14px;
-}
-.updates-modal-content::-webkit-scrollbar-track {
-  background: var(--ink);
-  border-left: 4px solid var(--ink);
-}
-.updates-modal-content::-webkit-scrollbar-thumb {
-  background: var(--yellow);
-  border: 3px solid var(--ink);
-  border-radius: 2px;
-}
-.updates-modal-content::-webkit-scrollbar-thumb:hover {
-  background: var(--red);
-}
+/* Brutalist Scrollbar Design */
+.updates-modal-content::-webkit-scrollbar { width: 14px; }
+.updates-modal-content::-webkit-scrollbar-track { background: var(--ink); border-left: 4px solid var(--ink); }
+.updates-modal-content::-webkit-scrollbar-thumb { background: var(--yellow); border: 3px solid var(--ink); border-radius: 2px; }
+.updates-modal-content::-webkit-scrollbar-thumb:hover { background: var(--red); }
 
-/* Overlay Active State */
-.updates-modal-overlay.active .updates-modal-content {
-  transform: translateY(0) scale(1);
-}
-
-/* 4. Brutalist Close Button */
+/* 4. Brutalist Close Button (Minus Hata Diya) */
 .close-modal-btn {
   position: absolute;
-  top: -20px;
-  right: -20px;
+  top: 20px; /* Minus hata diya taaki box ke andar rahe */
+  right: 20px; /* Minus hata diya */
+  z-index: 100;
   background: var(--red);
   color: white;
   border: 4px solid var(--ink);
@@ -1498,8 +1481,12 @@ body::after {
   transform: rotate(4deg);
   transition: transform 0.2s;
 }
-.close-modal-btn:hover {
-  transform: rotate(0deg) scale(1.1);
+.close-modal-btn:hover { transform: rotate(0deg) scale(1.1); }
+
+/* Mobile View Fix */
+@media(max-width: 768px) {
+  /* Yahan se bhi minus hata diya */
+  .close-modal-btn { right: 10px; top: 10px; font-size: 12px; } 
 }
 
 /* 5. Folder Grid Styles */
@@ -1854,7 +1841,7 @@ body::after {
   <!-- 1. Floating Pinned Note -->
   <button id="btn-open-updates" class="floating-updates-btn">
     <span class="pin">📌</span>
-    LATEST<br>INTEL
+    LATEST<br>UPDATES
   </button>
 
   <!-- ══════════════════════════ OVERLAY MODAL (FULL DIRECTORY) ══════════════════════════ -->
@@ -1865,7 +1852,12 @@ body::after {
       
       <div class="section-header" style="margin-bottom: 40px;">
         <div class="section-label" style="color:var(--yellow);">Resource Directory</div>
-        <h2 class="section-title" style="color:white; line-height: 1.1;">Microsoft<br/>Learning Hub</h2>
+        <h2 class="section-title" style="color:white; line-height: 1.1; display: flex; flex-direction: column; gap: 12px;">
+        <!-- Sticker style MS logo -->
+        <!-- Image root me hai isliye src="ms.jpeg" -->
+        <img src="ms.jpeg" alt="Microsoft" style="height: clamp(40px, 6vw, 55px); width: auto; object-fit: contain; background: white; padding: 6px 12px; border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transform: rotate(-2deg); align-self: flex-start;">
+        <span>Learning Hub</span>
+      </h2>
       </div>
       
       <div class="updates-grid">

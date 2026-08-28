@@ -487,11 +487,15 @@
   transform: translateY(0) scale(1);
 }
 
-/* Close Button */
+/* 4. Brutalist Close Button (Fixed Position) */
 .close-modal-btn {
   position: absolute;
-  top: -20px;
-  right: -20px;
+  /* Button ko box ke andar laaye taaki cut na ho */
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  
+  /* Baaki purana design ekdum same */
   background: var(--red);
   color: white;
   border: 4px solid var(--ink);
@@ -504,7 +508,20 @@
   transform: rotate(4deg);
   transition: transform var(--t-fast);
 }
-.close-modal-btn:hover { transform: rotate(0deg) scale(1.1); }
+
+.close-modal-btn:hover { 
+  transform: rotate(0deg) scale(1.1); 
+}
+
+/* Mobile par button ko thoda chota aur adjust kiya */
+@media(max-width: 768px) {
+  .close-modal-btn { 
+    top: 10px; 
+    right: 10px; 
+    font-size: 12px; 
+    padding: 6px 12px;
+  }
+}
 
 /* Folder Grid Styles */
 .updates-grid {
@@ -557,6 +574,9 @@
 @media(max-width: 768px) {
   .floating-updates-btn { bottom: 20px; right: 20px; padding: 10px 15px; font-size: 16px; }
   .floating-updates-btn .pin { font-size: 24px; top: -10px; }
-  .close-modal-btn { right: 10px; top: -15px; font-size: 12px; }
+  
+  /* Top margin ko positive 10px kar diya taaki box ke andar rahe */
+  .close-modal-btn { right: 10px; top: 10px; font-size: 12px; padding: 6px 12px; } 
+  
   .updates-modal-content { padding: 40px 20px; }
 }
