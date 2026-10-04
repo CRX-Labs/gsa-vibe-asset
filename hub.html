@@ -851,6 +851,17 @@
   </style>
 </head>
 <body>
+
+<div id="notebook-intro">
+  <div class="notebook-cover">
+    <div class="cover-content sketch-box">
+      <div class="intro-eyebrow">// TOP SECRET</div>
+      <h1 class="intro-title">GBC<br>MANUAL.</h1>
+      <div class="intro-stamp">NO TEMPLATES ALLOWED</div>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════════════ HIGH-VISIBILITY BRUTALIST NAV BAR ══════════════════════════ -->
 <nav style="position: sticky; top: 0; z-index: 100; background: var(--ink); border-bottom: 4px solid var(--yellow); padding: 15px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; min-height: 80px;">
   
@@ -896,6 +907,76 @@
       transform: scale(1.08) rotate(0deg) !important;
       box-shadow: 4px 4px 0 var(--ink) !important;
     }
+
+    /* ═══════════════════════════════════════════
+   INTRO: THE BRUTALIST NOTEBOOK FLIP
+   ═══════════════════════════════════════════ */
+#notebook-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: var(--ink); /* Dark desk background */
+  perspective: 2500px;    /* 3D Depth */
+  display: flex;
+  transition: visibility 0s linear 1.5s;
+}
+
+.notebook-cover {
+  position: absolute;
+  inset: 0;
+  background: var(--yellow);
+  transform-origin: left center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Speed 2.5s kar di aur movement ekdum smooth kar di */
+  transition: transform 2.5s ease-in-out, opacity 1s ease 1s;
+  box-shadow: 30px 0 60px rgba(0,0,0,0.5);
+}
+
+.cover-content {
+  background: var(--cream);
+  padding: 40px 60px;
+  transform: rotate(-3deg);
+  text-align: center;
+}
+
+.intro-title {
+  font-family: var(--font-marker);
+  font-size: clamp(60px, 12vw, 140px);
+  line-height: 0.9;
+  color: var(--ink);
+  margin: 10px 0;
+}
+
+.intro-eyebrow, .intro-stamp {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--red);
+}
+
+.intro-stamp {
+  border: 3px solid var(--red);
+  padding: 4px 10px;
+  display: inline-block;
+  transform: rotate(2deg);
+  margin-top: 10px;
+}
+
+/* ── THE OPENING ACTION ── */
+body.book-opened #notebook-intro {
+  background: transparent;
+  pointer-events: none;
+}
+
+body.book-opened .notebook-cover {
+  /* Flips 110 degrees to the left */
+  transform: rotateY(-110deg); 
+  opacity: 0; 
+}
+
   </style>
 </nav>
 
@@ -1209,6 +1290,24 @@
 </div>
 
 <script>
+
+// ── NOTEBOOK INTRO LOGIC (SLOW & SMOOTH VERSION) ──
+  document.addEventListener('DOMContentLoaded', () => {
+    const intro = document.getElementById('notebook-intro');
+    if (intro) {
+      document.body.style.overflow = 'hidden'; 
+      
+      // 2 seconds ka suspense (logo ko cover padhne ka time milega)
+      setTimeout(() => {
+        document.body.classList.add('book-opened');
+        document.body.style.overflow = ''; 
+        
+        // 3 seconds baad delete karega (taaki slow animation poori complete ho sake)
+        setTimeout(() => intro.remove(), 3000); 
+      }, 2000); 
+    }
+  });
+
   const WEBHOOK_URL = "https://hook.eu1.make.com/6u1lx24i153rxm6bzz9po87xi8qu1sm2";
 
   document.getElementById('gbc-join-form').addEventListener('submit', function(e) {

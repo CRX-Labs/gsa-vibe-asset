@@ -580,3 +580,63 @@
   
   .updates-modal-content { padding: 40px 20px; }
 }
+
+/* Ye button ko permission dega ki cloud bahar nikal sake */
+.floating-updates-btn {
+  overflow: visible !important;
+}
+/* Cloud Structure (Hawa mein latkane ke liye) */
+/* Cloud Structure */
+.brutal-cloud {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  right: -10px;
+  width: 160px;
+  background: white;
+  border: 3px solid var(--ink); /*[cite: 1] */
+  box-shadow: 4px 4px 0 var(--blue); /*[cite: 1] */
+  padding: 10px 14px; /*[cite: 1] */
+  font-family: var(--font-mono); /*[cite: 1] */
+  font-size: 11px; /*[cite: 1] */
+  font-weight: 700; /*[cite: 1] */
+  color: var(--ink); /*[cite: 1] */
+  text-transform: none; /*[cite: 1] */
+  line-height: 1.4; /*[cite: 1] */
+  text-align: center; /*[cite: 1] */
+  z-index: 1000; /*[cite: 1] */
+  pointer-events: none; /*[cite: 1] */
+  transform-origin: bottom right; /*[cite: 1] */
+  
+  /* Added base opacity */
+  opacity: 0; 
+  /* Speed fast kar di (5s) */
+  animation: autoPopCloud 5s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite; 
+}
+
+/* Cloud ka Arrow (Neeche ki taraf) */
+.brutal-cloud::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 30px;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-right: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  transform: rotate(45deg);
+}
+
+/* Keyframes for Auto-Pop Effect */
+@keyframes autoPopCloud {
+  0%, 10%   { opacity: 0; transform: translateY(15px) scale(0.8) rotate(5deg); }
+  15%, 45%  { opacity: 1; transform: translateY(0) scale(1) rotate(-2deg); }
+  50%, 100% { opacity: 0; transform: translateY(-10px) scale(0.9) rotate(0deg); }
+}
+
+/* Hover Override: Agar user hover kare toh cloud hamesha dikhega */
+.floating-updates-btn:hover .brutal-cloud {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotate(-2deg);
+  animation: none; 
+}

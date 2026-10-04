@@ -243,7 +243,7 @@ function initCounterRoll() {
       obs.unobserve(el);
       const suffix = raw.replace(/[0-9]/g, '');
       let start = 0;
-      const duration = 900;
+      const duration = 2000;
       const startTime = performance.now();
 
       function tick(now) {
